@@ -206,6 +206,7 @@ function slug(n){ return lc(n).replace(/[çğıöşü]/g,c=>TRMAP[c]).replace(/[
 const oneLine=(v,m)=>ss(v,m).replace(/\s+/g,' ');
 async function schoolCategories(all){ return [...all.values()].filter(c=>c&&c.type===ChannelType.GuildCategory&&lc(c.name).startsWith(CAT_PREFIX)); }
 async function loadSchools(){
+  if(!channel.guild) throw new Error('kanal guild değil');
   const all=await channel.guild.channels.fetch();
   const ids=new Set((await schoolCategories(all)).map(c=>c.id));
   for(const ch of all.values()){
@@ -215,6 +216,7 @@ async function loadSchools(){
   }
 }
 async function pickCategory(){
+  if(!channel.guild) throw new Error('kanal guild değil');
   const guild=channel.guild; const all=await guild.channels.fetch(); const cats=await schoolCategories(all);
   cats.sort((a,b)=>a.name.localeCompare(b.name,'tr',{numeric:true}));
   for(const c of cats){ const n=[...all.values()].filter(x=>x&&x.parentId===c.id).length; if(n<50) return c; } // Discord: kategori başına en fazla 50 kanal
@@ -222,6 +224,7 @@ async function pickCategory(){
 }
 function addSchool(name){ return withLock(async()=>{
   const k=lc(name); if(schoolIdx.has(k)) return schoolIdx.get(k);
+  if(!channel.guild) throw new Error('kanal guild değil');
   const cat=await pickCategory(); const base=slug(name); let n=base,i=2; const used=new Set([...schoolIdx.values()].map(s=>s.channel.name));
   while(used.has(n)) n=base+'-'+(i++);
   const ch=await channel.guild.channels.create({name:n,type:ChannelType.GuildText,parent:cat.id,topic:name});
