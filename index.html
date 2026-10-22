@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Türk Kızılayı · Kan Bağışı Sistemi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" src="./Türk_Kızılay_logo.svg" alt="Türk Kızılayı"/>
+      <div><h1>Kan Bağışı Sistemi</h1><p>TÜRK KIZILAYI</p></div>
+      <div class="heart">♥</div>
+      <div style="margin-left:16px;text-align:right">
+        <div id="roleInfo" class="muted" style="color:#ffe1e6">-</div>
+        <button id="logoutBtn" class="btn" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:white;margin-top:6px">Çıkış</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div id="anaEkran" style="display:none">
+      <div class="nav" id="nav">
+        <button class="active" data-page="dashboard">Genel Bakış</button>
+        <button data-page="register">Yeni Kayıt</button>
+        <button data-page="records">Kayıtlar</button>
+        <button data-page="stats">İstatistikler</button>
+        <button data-page="yonetim">Yönetim</button>
+        <button data-page="ranking">En Çok Bağışçı Getirenler</button>
+        <button data-page="schoolRanking">Okul Sıralaması</button>
+        <button data-page="inSchoolRanking">Okul İçi Sıralaması</button>
+      </div>
+
+      <section class="page active" id="dashboard"><div class="intro"><h2>Genel Bakış</h2></div><div class="stats"><div class="card stat"><small>TOPLAM BAĞIŞÇI</small><strong id="total">0</strong></div><div class="card stat"><small>OKUL / KURUM</small><strong id="schools">0</strong></div><div class="card stat"><small>ARACI ÖĞRENCİ</small><strong id="referrers">0</strong></div></div><div class="card"><h3>Son Kayıtlar</h3><div id="recent"></div></div></section>
+
+      <section class="page" id="register">
+        <div class="intro"><h2>Yeni Bağışçı Kaydı</h2><div class="muted">Bağışçı bilgilerini girip kaydedin</div></div>
+        <div class="notice" id="saveNotice" style="display:none">Bağışçı kaydı eklendi</div>
+        <div class="card">
+          <div class="field"><label>Bağışçı Adı Soyadı *</label><input id="name"></div>
+          <div class="field"><label>Okul / Kurum *</label><select id="schoolSelect"></select><button type="button" class="btn" id="addSchoolBtn" style="margin-top:6px">Yeni Okul/Kurum Ekle</button></div>
+          <div class="field"><label>Aracı Öğrenci *</label><select id="referrerSelect"></select><button type="button" class="btn" id="addReferrerBtn" style="margin-top:6px">Yeni Aracı Öğrenci Ekle</button></div>
+          <div class="field"><label>Not</label><textarea id="note"></textarea></div>
+          <button class="btn primary" id="entryFormSubmit">Kaydet</button>
+        </div>
+      </section>
+
+      <section class="page" id="stats">
+        <div class="intro"><h2>İstatistikler</h2><div class="muted" id="statsUpdated">-</div></div>
+        <div class="stats">
+          <div class="card stat"><small>TOPLAM BAĞIŞÇI</small><strong id="stAll">0</strong></div>
+          <div class="card stat"><small>OKUL / KURUM</small><strong id="stSchools2">0</strong></div>
+          <div class="card stat"><small>ARACI ÖĞRENCİ</small><strong id="stRefs2">0</strong></div>
+        </div>
+        <div class="card"><h3>Saatlik Kayıt Dağılımı</h3><div id="stHourly"></div></div>
+        <div class="grid">
+          <div class="card"><h3>En Çok Bağışçı Getiren Okullar</h3><div id="stSchools"></div></div>
+          <div class="card"><h3>En Çok Bağışçı Getiren Aracılar</h3><div id="stRefs"></div></div>
+        </div>
+      </section>
+
+      <section class="page" id="yonetim">
+        <div class="intro"><h2>Yönetim</h2></div>
+        <div class="card"><h3>Dışa Aktar</h3><button class="btn primary" id="exportCsv">CSV İndir</button></div>
+        <div class="card"><h3>Sıralamalar</h3><div class="muted">Menüden erişebilirsiniz</div></div>
+      </section>
+
+      <section class="page" id="records"><div class="intro"><h2>Kayıtlar</h2><div class="muted" id="recordCount"></div></div><div class="card"><div class="grid"><div class="field"><label>Arama</label><input id="search"></div><div class="field"><label>Okula Göre</label><select id="filterSchool"><option value="">Tümü</option></select></div></div><div id="recordList"></div></div></section>
+      <section class="page" id="ranking"><div class="intro"><h2>En Çok Bağışçı Getirenler</h2><div class="muted">Getirdiği toplam bağışçı sayısına göre</div></div><div class="card"><div id="rankingList"></div></div></section>
+      <section class="page" id="schoolRanking"><div class="intro"><h2>Okul Sıralaması</h2></div><div class="card"><div id="schoolRankingList"></div></div></section>
+      <section class="page" id="inSchoolRanking"><div class="intro"><h2>Okul İçi Sıralama</h2></div><div class="field"><select id="inSchoolSelect"></select></div><div class="card"><div id="inSchoolRankingList"></div></div></section>
+    </div>
+    <footer>♥ Türk Kızılayı · Kan Bağışı Sistemi</footer>
+  </main>
+  <div id="templates" hidden="">
+    <div class="entry recordEntry"><div class="row"><div class="grow"><h3 class="entryName">-</h3><div class="muted entryMisc">-</div><div class="muted">Not: <span class="entryNote"></span></div></div><div><button class="btn danger entryDelete" style="margin-left:4px">Sil</button></div></div></div>
+    <div class="rankEntry"><div class="row" style="align-items:center"><div class="medal" style="width:24px;font-weight:800">1</div><div class="grow"><h3 class="entryName">-</h3><div class="muted entryMisc">-</div></div><div style="width:180px"><div style="height:7px;background:#eee;border-radius:6px;overflow:hidden"><div class="entryBar" style="height:100%;background:#a7192d"></div></div></div><div style="width:50px;text-align:right;font-weight:800" class="entryCount">0</div></div></div>
+  </div>
+  <div id="modal" class="modal" style="display:none">
+    <div class="modal-box">
+      <h3 id="modalTitle" style="margin:0 0 12px"></h3>
+      <input id="modalInput" maxlength="100" autocomplete="off">
+      <div id="modalErr" class="modal-err" style="display:none"></div>
+      <div class="modal-actions"><button type="button" class="btn" id="modalCancel">İptal</button><button type="button" class="btn primary" id="modalOk">Ekle</button></div>
+    </div>
+  </div>
+  <script src="jquery.min.js"></script>
+  <script src="app.js?v=11"></script>
+</body>
+</html>
